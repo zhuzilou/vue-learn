@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>自定义过滤器</title>
+  <script src="js/vue.js"></script>
+  <script>
+    /**
+     * 自定义全局过滤器
+     */
+    Vue.filter("addZero", function (data) {
+      console.log(data);
+      return data < 10 ? "0" + data : data;
+    });
+    Vue.filter("date", data => {
+      let d = new Date(data);
+      return (
+        d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds()
+      );
+    });
+
+     //使用局部过滤器替代
+    // Vue.filter("number", (data, n) => {
+    //   console.log(data, n);
+    //   //原生bug: 12.045保留2位小数，chrome下显示12.04
+    //   return data.toFixed(n);
+    // });
+    
+    window.onload = function () {
+      let vm = new Vue({
+        el: ".container",
+        data: {
+          currentTime: Date.now()
+        },
+        filters: {
+          number: (data, n) => {
+            console.log(data, n);
+            //原生bug: 12.045保留2位小数，chrome下显示12.04
+            return data.toFixed(n);
+          }
+        }
+      });
+    };
+  </script>
+</head>
+
+<body>
+  <div class="container">
+    <h3>{{ 8 | addZero }}</h3>
+    <h3>{{ 12.045 | number(2)}}</h3>
+    <h3 v-cloak>{{ currentTime | date }}</h3>
+  </div>
+</body>
+
+</html>

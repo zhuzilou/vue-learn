@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>vue实例的属性和方法</title>
+    <script src="js/vue.js"></script>
+</head>
+
+<body>
+    <div id="itany">
+        {{msg}}
+        <h2 ref="h2">你好</h2>
+    </div>
+    <hr>
+    <div id="manualMount">
+        {{abc}}
+    </div>
+    <hr>
+    <div id="delayMsg">
+        {{delayMsg}}
+    </div>
+
+    <script>
+        window.onload = function () {
+            let vm = new Vue({
+                el: '#itany',
+                data() {
+                    return {
+                        msg: 'welcome to Shanghai'
+                    }
+                },
+                name: 'custom name',
+                show: function () {
+                    console.log('custom function');
+                }
+            });
+            /*
+             vue实例属性：vm.$el, vm.$data, vm.$options, vm.$refs
+            */
+            //vm.属性名获取data中的属性
+            console.log('属性：' + vm.msg);
+
+            //vm.$el: 获取$el绑定的DOM对象
+            console.log(vm.$el);
+            //操作DOM对象
+            vm.$el.style.color = 'red';
+
+            //vm.$data 获取数据对象data  
+            console.log(vm.$data);
+            console.log(vm.$data.msg);
+
+            // vm.$options 获取自定义属性
+            console.log(vm.$options.name);
+            vm.$options.show();
+
+            //vm.$refs 获取页面中所有添加ref属性的DOM对象
+            vm.$refs.h2.innerHTML = 'vm.$refs操作DOM对象';
+
+            /* vue方法 */
+            //vm.$mount 手动挂载
+            let manual = new Vue({
+                // el: '#manualMount',
+                data() {
+                    return {
+                        abc: '手动挂载vue'
+                    }
+                }
+            }).$mount('#manualMount');
+            //相当于el: '#manualMount'
+            // manual.$mount('#manualMount');
+
+            //vm.$nextTick(callback)
+            let delayMsg = new Vue({
+                el: '#delayMsg',
+                data() {
+                    return {
+                        delayMsg: '数据待更新'
+                    }
+                }
+            });
+            delayMsg.delayMsg = '数据已更新';
+            //Vue数据发生变化时需要一定时间按照一定策略进行DOM更新，此时DOM未更新完成，直接获取DOM数据会显示旧的信息。
+            console.log('显示旧数据：' + delayMsg.$el.textContent);
+            //使用vm.$nextTick(callback)将等DOM更新完成后再执行操作
+            delayMsg.$nextTick(function() {
+                console.log('显示新数据：' + delayMsg.delayMsg);
+            });
+        }
+    </script>
+</body>
+
+</html>

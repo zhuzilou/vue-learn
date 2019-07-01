@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>计算属性</title>
+    <script src="js/vue.js"></script>
+</head>
+
+<body>
+    <div id="itany">
+        <h2>计算属性基本用法</h2>
+        <span>普通属性：</span>{{msg}}
+        <br>
+        <span>计算属性（对数据进行逻辑处理后的结果）：</span>{{msgC}}
+        <br>
+        <button @click='changeMsg'>操作普通属性，计算属性也会变化</button>
+
+        <h2>计算属性 VS 方法</h2>
+        <ul>
+            <li>计算属性是基于它的依赖进行更新的，只有在相关依赖发生改变时才能更新变化</li>
+            <li>计算属性是缓存的，只要依赖没有变化，多次访问计算属性得到的值是之前缓存的计算结果，不会多次执行。</li>
+        </ul>
+        <button onclick="scheduled1()">计算属性获取为缓存</button>
+        <button onclick="scheduled2()">方法获取将多次执行</button>
+
+        <h2>计算属性的get set</h2>
+        <ul>
+            <li>由于计算属性依赖于普通属性，不能直接使用set方法修改计算属性，这样会造成set递归死循环，应当在set函数中修改所依赖的普通属性。</li>
+        </ul>
+        <button @click="changeMsgC">修改计算属性值</button>
+        <br>
+        <span>普通属性：</span>{{msg}}
+        <br>
+        <span>计算属性：</span>{{msgC}}
+    </div>
+
+    <script>
+        let vm = new Vue({
+            el: '#itany',
+            data() {
+                return {
+                    msg: 'common property'
+                }
+            },
+            computed: {
+                msgC: {
+                    get: function () {
+                        console.log("计算属性get方法：" + new Date());
+                        //等同于get函数
+                        return this.msg.split(' ').reverse().join(' ');
+                    },
+                    set: function (val) {
+                        //修改计算属性把依赖的普通属性，达到修改计算属性的目的。
+                        this.msg = val;
+                    }
+                }
+            },
+            methods: {
+                changeMsg() {
+                    this.msg = 'welcome to Shanghai';
+                },
+                getMsg() {
+                    console.log("普通方法：" + new Date());
+                    return this.msg;
+                },
+                changeMsgC() {
+                    this.msgC = 'welcome to itany';
+                }
+            }
+        });
+        function scheduled1() {
+            setInterval(function () {
+                console.log('计算属性缓存，不打印时间：' + vm.msgC);
+            }, 2000);
+        }
+        function scheduled2() {
+            setInterval(function () {
+                console.log('方法获取每次都执行，打印时间：' + vm.getMsg());
+            }, 2000);
+        }
+    </script>
+</body>
+
+</html>

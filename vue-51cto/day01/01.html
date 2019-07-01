@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Hello world</title>
+    <script src="js/vue.js"></script>
+    <!-- 阻止vue启动时生成生产消息 -->
+    <script>Vue.config.productionTip = false</script>
+    <script>
+        window.onload = function() {
+            //配置是否允许vue-devtools检查代码，方便测试，生产环境中需要设置为false
+            // Vue.config.devtools = false;
+
+            new Vue({
+                el: '#itany',
+                data() {
+                    return {
+                        msg: 'Hello world'
+                    }
+                },
+            });
+        };
+    </script>
+</head>
+<body>
+    <div id="itany">
+        {{msg}}
+    </div>
+</body>
+</html>

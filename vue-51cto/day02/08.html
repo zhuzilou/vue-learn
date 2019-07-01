@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>自定义指令 $directive</title>
+    <script src="js/vue.js"></script>
+</head>
+
+<body>
+    <div id="itany">
+        <h2>模板itany</h2>
+        <button @click="change1">更新v-hello数据</button>
+        <h3 v-hello>全局自定义指令v-hello：{{msg}}</h3>
+        <hr>
+        <button @click="change2">更新v-world数据</button>
+        <h3 v-world>全局自定义指令v-world：Hello {{world}}</h3>
+    </div>
+    <hr>
+    <div id="diff_template">
+        <h2>模板diff_template</h2>
+        <button @click="change3">更新‘带参数钩子’数据</button>
+        <h3 v-dir_params:dir_arg="dir_expression">全局自定义指令v-dir_params：{{dirParams}}</h3>
+        <hr>
+        局部自定义指令v-focus：<input value="局部自定义指令1" v-focus>
+    </div>
+
+    <script>
+        window.onload = function () {
+            //自定义指令使用小写命名
+            //定义全局指令 Vue.directive(id, [definition])，使用v-指令名绑定，类似内置指令v-on、v-bind
+            Vue.directive('hello', {
+                bind() {
+                    //常用配置
+                    alert('bind: 指令第一次绑定到元素上时调用，只调用一次，可执行初始化操作');
+                },
+                inserted() {
+                    alert('inserted: 被绑定元素插入到DOM中时调用');
+                },
+                //触发时机: 被绑定元素所在模块更新时调用，不是根据绑定值的变化
+                update(el, binding, vnode, oldvnode) {
+                    alert('update: 被绑定元素（标签）所在模板（el绑定的标签）更新时调用');
+                    console.log(vnode);
+                    console.log(oldvnode);
+                },
+                componentUpdated() {
+                    alert('componentUpdated: 被绑定元素所在模板完成一次更新周期时调用');
+                    //该钩子方法执行完成，页面才会完成新数据渲染
+                },
+                unbind() {
+                    //暂时无法测试到
+                    alert('unbind: 指令与元素解绑时调用，只调用一次');
+                }
+            });
+
+            //自定义指令简略写法
+            Vue.directive('world', function (vnode, oldvnode) {
+                // 这里将会被 `bind` 和 `update` 调用
+                console.log('全局自定义指令2简略写法：bind和update阶段将被调用');
+                // console.log(vnode);
+                // console.log(oldvnode);
+
+            });
+
+            /**
+             * 带参数的的指令
+             * binding：一个对象，包含以下属性
+             */
+            Vue.directive('dir_params', {
+                update(el, binding) {
+                    // console.log(el); //指令所绑定的元素，可以用来直接操作 DOM 。
+                    console.log('binding.name 指令名，v-后面的名称: ' + binding.name);
+                    console.log('binding.expression 指令绑定值的表达式（字符串形式）: ' + binding.expression);
+                    console.log('binding.value 指令的绑定值‘v-指令名:arg=`expression的值，binding.expression的值`’: ' + binding.value);
+                    console.log('binding.oldValue 指令的绑定旧值: ' + binding.oldValue);
+                    console.log('binding.arg 传给指令的参数‘v-指令名:arg:=`...` ’' + binding.arg);
+                }
+            });
+
+
+            let vm = new Vue({
+                el: '#itany',
+                data() {
+                    return {
+                        msg: 'welcome to Shanghai',
+                        world: 'world'
+                    }
+                },
+                methods: {
+                    change1() {
+                        //测试指令中的update()、componentUpdated()函数
+                        this.msg = 'welcome to dxinfor';
+                        alert('触发hello自定义标签的update钩子函数，以及触发hello绑定的元素（h3标签）所在的模板（#itany）中其他标签的自定义指令的update方法。'
+                            + '\nhello.update->hello.componentUpdated->world.update');
+                    },
+                    change2() {
+                        this.world = 'xiao ming';
+                        alert('v-world更新将触发hello.update->hello.componentUpdated');
+                    }
+                }
+            });
+
+            let vm2 = new Vue({
+                el: '#diff_template',
+                data() {
+                    return {
+                        dirParams: '带参数的钩子',
+                        dir_expression: '指令绑定的表达式'
+                    }
+                },
+                directives: {
+                    //自定义局部指令
+                    focus: {
+                        //当被绑定元素插入到DOM时获得焦点
+                        inserted(el) {
+                            el.focus();
+                        },
+                        update() {
+                            console.log('v-focus钩子函数');
+                        }
+                    }
+                },
+                methods: {
+                    change3() {
+                        //测试指令中的update()、componentUpdated()函数
+                        this.dirParams = 'new value';
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>监视数据变化：$watch</title>
+    <script src="js/vue.js"></script>
+</head>
+
+<body>
+    <div id="itany">
+        <input type="text" v-model="name">
+        <h2>{{name}}</h2>
+        <hr>
+
+        <input type="text" v-model="age">
+        <h2>{{age}}</h2>
+        <hr>
+
+        <input type="text" v-model="user.name">
+        <h2>{{user.name}}</h2>
+    </div>
+
+    <script>
+        window.onload = function () {
+            let vm = new Vue({
+                el: '#itany',
+                data() {
+                    return {
+                        name: 'tom',
+                        age: 18,
+                        user: {
+                            id: 1001,
+                            name: 'alice'
+                        }
+                    }
+                },
+                watch: {
+                    //方式2：使用vue实例提供的选项watch
+                    age: (newVal, oldVal) => {
+                        console.log('age的值被改变，原值' + oldVal + ' 新值：' + newVal);
+                    },
+                    //watch同样可以监视对象，但需要设定参数deep值为true，当user对象中的属性值发生改变时触发handler中定义的方法
+                    user: {
+                        handler: (newVal, oldVal) => {
+                            //由于user是引用对象，无法监视到原有属性，即oldVal.name == newVal.name
+                            console.log('user的值被改变，原值' + oldVal.name + ' 新值：' + newVal.name);
+                        },
+                        deep: true
+                    }
+                }
+            });
+            //方式1：使用vue实例中的$watch方法实现监视
+            vm.$watch('name', (newVal, oldVal) => {
+                console.log('name的值被改变，原值' + oldVal + ' 新值：' + newVal);
+            });
+        }
+    </script>
+</body>
+
+</html>

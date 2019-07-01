@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>使用Vue实现增删查，添加全选按钮</title>
+  <link rel="stylesheet" href="bootstrap/bootstrap.min.css" />
+  <script src="js/vue.js"></script>
+  <script src="bootstrap/jquery.min.js"></script>
+  <script src="bootstrap/bootstrap.min.js"></script>
+  <script>
+    window.onload = function () {
+      let vm = new Vue({
+        el: ".container",
+        data: {
+          users: [
+            {
+              name: "tom",
+              age: 22,
+              email: "tom@itany.com",
+              isSelected: false
+            },
+            {
+              name: "jack",
+              age: 25,
+              email: "jack@itany.com",
+              isSelected: false
+            },
+            {
+              name: "jerry",
+              age: 20,
+              email: "jerry@itany.com",
+              isSelected: false
+            }
+          ],
+          user: {},
+          //是否全选
+          isSelectAll: false,
+          selectedUsers: [],
+          delModalTitle: '',
+          isDisabled: false
+        },
+        // 一定要是methods，而不是method。
+        methods: {
+          addUser() {
+            //alert('a');
+            this.users.push(this.user);
+            this.user = {};
+          },
+          deleteUser() {
+            this.users = this.users.filter(user => !user.isSelected);
+          },
+          selectAllUsers() {
+            //全选或反选所有checkbox
+            this.isSelectAll = !this.isSelectAll;
+            this.users.forEach(user => {
+              user.isSelected = this.isSelectAll;
+            });
+            //控制删除按钮是否可用
+            this.isDisabled = this.isSelectAll;
+          },
+          selectOneUser(user) {
+            //选中或反选当前checkbox
+            user.isSelected = !user.isSelected;
+            //console.log(this.users.filter(user => user.isSelected).length);
+
+            if (this.users.filter(user => user.isSelected).length === 0) {
+              //当所有checkbox未选中时，全选按钮应显示未选中状态，删除按钮不可用           
+              this.isDisabled = false;
+              this.isSelectAll = false;
+            } else if (this.users.filter(user => user.isSelected).length === this.users.length) {
+              //当所有checkbox被选中时，全选按钮应显示选中状态
+              this.isSelectAll = true;
+            } else {
+              //当有一个checkbox被选中时，删除按键可用
+              this.isDisabled = true;
+            }
+          },
+          openDelModal() {
+            let delNames = this.users.filter(user => user.isSelected).map(user => user.name);
+            if (delNames.length == this.users.length) {
+              this.delModalTitle = "请确认要删除所有用户吗？";
+            } else {
+              this.delModalTitle =
+                "请确认要删除用户:" + delNames.join(",") + "吗？";
+            }
+          }
+        }
+      });
+    };
+  </script>
+</head>
+
+<body>
+  <div class="container">
+    <h2 class="text-center">添加用户</h2>
+    <form>
+      <div class="form-group row">
+        <label for="name" class="col-sm-2 col-form-label col-form-label-sm offset-sm-2">姓 名：</label>
+        <div class="col-sm-6">
+          <input type="text" class="form-control form-control-sm" id="name" v-model="user.name" placeholder="请输入姓名" />
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="age" class="col-sm-2 col-form-label col-form-label-sm offset-sm-2">年 龄：</label>
+        <div class="col-sm-6">
+          <input type="text" class="form-control form-control-sm" id="age" v-model="user.age" placeholder="请输入年龄" />
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="email" class="col-sm-2 col-form-label col-form-label-sm offset-sm-2">邮 箱：</label>
+        <div class="col-sm-6">
+          <input type="text" class="form-control form-control-sm" id="email" v-model="user.email" placeholder="请输入邮箱" />
+        </div>
+      </div>
+      <div class="form-group row justify-content-sm-around">
+        <input type="button" value="添  加" class="btn btn-primary" v-on:click="addUser" />
+        <input type="reset" value="重  置" class="btn btn-primary" />
+      </div>
+    </form>
+    <hr />
+    <table class="table table-bordered table-hover">
+      <caption class="h3 text-center text-info" style="caption-side: top">
+        用户列表
+      </caption>
+      <thead>
+        <tr class="text-center">
+          <th>序号</th>
+          <th>姓名</th>
+          <th>年龄</th>
+          <th>邮箱</th>
+          <th>
+            <div class="form-check">
+              <input type="checkbox" class="form-check-input" id="selectAll" v-on:click="selectAllUsers" v-bind:checked="isSelectAll" />
+              <label for="selectAll" class="form-check-label">全选</label>
+            </div>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(user, index) in users" class="text-center">
+          <td>{{ index + 1 }}</td>
+          <td>{{ user.name }}</td>
+          <td>{{ user.age }}</td>
+          <td>{{ user.email }}</td>
+          <td>
+            <!--
+                <button class="btn btn-danger btn-sm" v-on:click="nowIndex=index" data-toggle="modal" data-target="#delModal">删除</button>
+              -->
+            <div class="form-check">
+              <input type="checkbox" class="form-check-input" id="selectOne" v-bind:checked="user.isSelected"
+                v-on:click="selectOneUser(user)" />
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="5" class="text-sm-right">
+            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#delModal" v-on:click="openDelModal"
+              v-bind:disabled="!isDisabled">
+              删除
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!--
+        模态窗口 data-backdrop属性用于指定必须点击模态窗口上的按钮，模态窗口才会消失
+      -->
+    <div class="modal fade" tabindex="-1" role="dialog" id="delModal" data-backdrop="static">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">{{ delModalTitle }}</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>用户将被删除</p>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-primary" type="button" v-on:click="deleteUser" data-dismiss="modal">
+              确认
+            </button>
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">
+              取消
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

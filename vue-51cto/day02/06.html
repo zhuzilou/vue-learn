@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>添加和删除对象的属性：$set、$delete</title>
+    <script src="js/vue.js"></script>
+</head>
+
+<body>
+    <div id="itany">
+        <button @click="doAdd">添加属性</button>
+        <button @click="doDelete">删除属性</button>
+        <hr>
+        <h2>{{user.name}}</h2>
+        <h2>{{user.age}}</h2>
+    </div>
+
+    <script>
+        window.onload = function () {
+            let vm = new Vue({
+                el: '#itany',
+                data() {
+                    return {
+                        user: {
+                            id: 1,
+                            name: 'tom'
+                        }
+                    }
+                },
+                methods: {
+                    /** 
+                     * vm.$set(object, key, value)
+                    */
+                    doAdd() {
+                        // this.user.age = 28;  //通过普通方式为对象添加属性时vue无法实时监视
+                        // this.$set(this.user, 'age', 18); //方式1：通过vue的实例$set方法为对象添加属性，可以实时监视
+                        // Vue.set(this.user, 'age', 22);   //方式2：等同于this.$set(...)
+
+                        //延伸用法，判断对象属性是否存在，然后添加对应属性或者操作该属性
+                        if(this.user.age) {
+                            this.user.age++;
+                        } else {
+                            this.$set(this.user, 'age', 1);
+                        }
+                        console.log(this.user);
+                    },
+                    /** 
+                     * vm.$delete(object, key)
+                    */
+                    doDelete() {
+                        if(this.user.age) {
+                            this.$delete(this.user, 'age');   //等同于Vue.delete(...)
+                        }
+                    }
+                }
+            });
+           
+        }
+    </script>
+</body>
+
+</html>
