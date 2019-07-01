@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script src="./js/vue.min.js"></script>
+</head>
+<body>
+  <div id="app">
+    <h1 v-show="isShow">1</h1>
+    <h1 v-show="isShow">2</h1>
+    <h1 v-show="isShow">3</h1>
+    <h1 v-if="isShow">4</h1>
+    <button @click="display">显示/隐藏</button>
+  </div>
+  <script>
+    new Vue({
+      el: "#app",
+      data() {
+        return {
+          isShow: true
+        }
+      },
+      methods: {
+        display(e) {
+          console.log('事件对象：' + e)
+          // this就是data函数return出去的对象，vue帮我们处理的this指向，不是事件对象了。
+          console.log('Vue中data函数return的对象：' + this)
+          this.isShow = !this.isShow
+        }
+      },
+    })
+  </script>
+</body>
+</html>
