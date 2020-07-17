@@ -1,0 +1,41 @@
+{
+  "flag": "1",
+  "message": "success",
+  "data": [
+    {
+      "issueDateStr": "2020-01-11",
+      "channel": "01",
+      "circulation": "20",
+      "success": "10",
+      "failed": "0"
+    },
+    {
+      "issueDateStr": "2020-01-11",
+      "channel": "02",
+      "circulation": "20",
+      "success": "0",
+      "failed": "0"
+    },
+    {
+      "issueDateStr": "2020-01-11",
+      "channel": "03",
+      "circulation": "20",
+      "success": "10",
+      "failed": "0"
+    },
+    {
+      "issueDateStr": "2020-01-11",
+      "channel": "04",
+      "circulation": "20",
+      "success": "10",
+      "failed": "0"
+    },
+    {
+      "issueDateStr": "2020-01-11",
+      "channel": "05",
+      "circulation": "20",
+      "success": "10",
+      "failed": "0"
+    }
+  ]
+}
