@@ -1,0 +1,130 @@
+/*
+* index.css
+*/
+@media screen and (min-height: 500px){
+    .top {
+        position: relative;
+        left: 0px;
+        top: 0px;
+        width: 100%;
+        height: 34%;
+        background-image: url("../../../image/invoice/zzs/bg_index.png");
+        background-size: 100% 100%;
+    }
+}
+
+@media screen and (min-height: 720px){
+    .top {
+        position: relative;
+        left: 0px;
+        top: 0px;
+        width: 100%;
+        height: 27%;
+        background-image: url("../../../image/invoice/zzs/bg_index.png");
+        background-size: 100% 100%;
+    }
+}
+
+.title {
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.title > img {
+    width: 2.1rem;
+    height: 0.34rem;
+}
+
+.main {
+    position: relative;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 64%;
+    box-sizing: border-box;
+    padding: 0px 10px 10px 10px;
+}
+
+.main_content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    box-shadow: 0px 0px 10px 1px #e1e1e1;
+    border-radius: 6px;
+    box-sizing: border-box;
+    padding: 15px;
+}
+
+.exp {
+    position: relative;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 86%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    background-color: #ffffff;
+    overflow-scrolling: touch;
+    -webkit-overflow-scrolling: touch;
+    -moz-overflow-scrolling: touch;
+    -ms-overflow-scrolling: touch;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+.exp > p {
+    counter-increment: counter-a;
+    color: #347a71;
+    font-size: 0.15rem;
+    line-height: 1.7;
+}
+
+.exp > p:before {
+    content: counter(counter-a) '、';
+    color: #347a71;
+}
+
+.btns {
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
+    width: 100%;
+    height: 16%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btns:before {
+    position: absolute;
+    left: 15px;
+    top: 0px;
+    content: '';
+    width: 3.25rem;
+    height: 2px;
+    border-top: solid 1px #b6d9d7;
+}
+
+.next {
+    width: 3.2rem;
+    height: 0.42rem;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: solid 1px #01a29a;
+    background-color: #e2f6f5;
+    border-radius: 4px;
+    color: #01a29a;
+    font-size: 0.15rem;
+    box-shadow: 1px 1px 4px 1px #cccccc;
+}
+

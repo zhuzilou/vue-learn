@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>模板语法</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <style>
+        h1 {
+            text-decoration: underline
+        }
+    </style>
+</head>
+
+<body>
+    <h1>插值</h1>
+    <h2>#文本 （数据绑定最常见的形式就是使用“Mustache”语法 (双大括号) 的文本插值）</h2>
+    <div id="app1">
+        <span>Message: {{ msg }}</span>
+        <br>
+        <span v-once>加入v-once属性，这里的值将不会改变: {{ msg }}</span>
+        <br>
+        <input v-model="msg">
+    </div>
+    <h2>#原始HTML （双大括号会将数据解释为普通文本，而非 HTML 代码。为了输出真正的 HTML，你需要使用v-html显示HTML。绝不要对用户提供的内容使用插值，防止XSS攻击。）</h2>
+    <div id="app2">
+        <p>Using mustaches: {{ rawHtml }}</p>
+        <p>Using v-html directive:
+            <span v-html="rawHtml"></span>
+        </p>
+    </div>
+    <h2>#特性 (Mustache 语法不能作用在 HTML 特性上，遇到这种情况应该使用 v-bind 指令)</h2>
+    <div id="app3">
+        <div v-bind:id="dynamicId">绑定div的id使用v-bind:id=""</div>
+        <button v-bind:disabled="isButtonDisabled">Button</button>
+        <button v-on:click="changeId()">改变id</button>
+        <button v-on:click="changeBtnStatus()">改变Button状态</button>
+    </div>
+</body>
+<script>
+    var app1 = new Vue({
+        el: "#app1",
+        data: {
+            msg: "插入文本值"
+        }
+    });
+    var app2 = new Vue({
+        el: "#app2",
+        data: {
+            rawHtml: '<span style="color:red">使用v-html输出原始HTML</span>'
+        }
+    });
+    var app3 = new Vue({
+        el: "#app3",
+        data: {
+            dynamicId: "动态id",
+            isButtonDisabled: false
+        },
+        methods: {
+            changeId() {
+                this.dynamicId = "动态改变id" + new Date().toLocaleString();
+                console.log(this.dynamicId);
+            },
+            changeBtnStatus() {
+                this.isButtonDisabled = this.isButtonDisabled === true ? null : true;
+            }
+        },
+    });
+</script>
+
+</html>

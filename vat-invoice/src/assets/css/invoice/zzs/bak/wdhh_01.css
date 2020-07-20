@@ -1,0 +1,115 @@
+/*
+* wdhh_01.css
+*/
+@CHARSET "UTF-8";
+@media screen and (min-height: 500px){
+    .top {
+        position: relative;
+        left: 0px;
+        top: 0px;
+        width: 100%;
+        height: 33%;
+        background-image: url("~@/assets/image/invoice/zzs/bg3_pic.png");
+        background-size: 100% 100%;
+    }
+
+}
+
+@media screen and (min-height: 720px){
+    .top {
+        position: relative;
+        left: 0px;
+        top: 0px;
+        width: 100%;
+        height: 26%;
+        background-image: url("~@/assets/image/invoice/zzs/bg3_pic.png");
+        background-size: 100% 100%;
+    }
+
+}
+.bot {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-top: solid 1px #e8e8e8;
+    background-color: #fbfbfb;
+}
+
+.main {
+    position: relative;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.15rem;
+}
+
+.group_cell {
+    position: relative;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    background-color: #ffffff;
+    border-radius: 6px;
+    box-shadow: 1px 1px 4px 1px #caecea;
+    display: flex;
+    align-items: center;
+    height: 0.6rem;
+    box-sizing: border-box;
+    padding: 0px 0.3rem;
+    font-size: 0.16rem;
+    margin-top: 0.1rem;
+}
+
+.group_cell:after {
+    position: absolute;
+    right: 20px;
+    top: 43%;
+    content: '';
+    height: 8px;
+    width: 8px;
+    transform: rotate(45deg);
+    border-top: solid 1px #d5d5d5;
+    border-right: solid 1px #d5d5d5;
+}
+
+.group_cell:last-child {
+    margin-bottom: 0.5rem;
+}
+
+.hh_num {
+    height: 0.21rem;
+    background: url("../../../image/invoice/zzs/number_bg.png");
+    background-size: 100% 100%;
+    color: #ffffff;
+    font-size: 0.15rem;
+    margin-left: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 10px;
+}
+
+/*.hh_num:after {*/
+    /*content: '户';*/
+    /*color: #ffffff;*/
+/*}*/
+
+#progress {
+    color: #2dbbb4;
+}
+
+#jindu_logo {
+    width: 0.2rem;
+    height: 0.2rem;
+    margin-right: 0.15rem;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}

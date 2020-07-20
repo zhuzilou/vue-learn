@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>三级联动全选</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <style>
+    img {
+      pointer-events: none;
+      /* cancel pointer events*/
+      -webkit-touch-callout: none;
+      /* iOS Safari */
+      -webkit-user-select: none;
+      /* Chrome/Safari/Opera */
+      -khtml-user-select: none;
+      /* Konqueror */
+      -moz-user-select: none;
+      /* Firefox */
+      -ms-user-select: none;
+      /* Internet Explorer/Edge */
+      user-select: none;
+      /* Non-prefixed version, currently not supported by any browser */
+    }
+
+    input,
+    button,
+    select,
+    textarea {
+      outline: none;
+    }
+
+    .container {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow-x: hidden;
+      overflow-y: scroll;
+      background-color: #ffffff;
+      overflow-scrolling: touch;
+      -webkit-overflow-scrolling: touch;
+      -moz-overflow-scrolling: touch;
+      -ms-overflow-scrolling: touch;
+    }
+
+    .div2 {
+      position: relative;
+      left: 0px;
+      top: 0px;
+      box-sizing: border-box;
+      padding: 0px 0.15rem;
+      width: 100%;
+      height: 2.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    [class^="radio_"] {
+      width: 1.16rem;
+      height: 1.16rem;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      border-radius: 50%;
+    }
+
+    .div2>input[type="radio"] {
+      margin-left: 0.15rem;
+    }
+
+    .radio_on {
+      background: url("quanxuan_ico.png");
+      background-size: 100% 100%;
+      border: none;
+    }
+
+    .radio_off {
+      border: solid 1px #aaaaaa;
+      background-color: #ffffff;
+    }
+
+    .match_count {
+      letter-spacing: 1px;
+      color: #edc76b;
+    }
+
+    .modules {
+      position: relative;
+      left: 0px;
+      top: 0px;
+      width: 100%;
+      height: calc(100% - 3.32rem);
+      box-sizing: border-box;
+      padding: 0.1rem 0.15rem;
+      overflow-x: hidden;
+      overflow-y: scroll;
+    }
+
+    .module {
+      width: 100%;
+      min-height: 1.3rem;
+      border-radius: 4px;
+      border: solid 1px #70d9d4;
+      box-shadow: 0px 1px 4px 1px #e1e1e1;
+      margin-top: 0.1rem;
+      box-sizing: border-box;
+      padding-bottom: 0.15rem;
+    }
+
+    .module:first-child {
+      margin-top: 0px;
+    }
+
+    .module_title {
+      position: relative;
+      left: 0px;
+      top: 0px;
+      height: 2.0rem;
+      box-sizing: border-box;
+      padding: 0.08rem 0.15rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 1rem;
+      color: #01a29a;
+    }
+
+    .module_title>div {
+      display: flex;
+      align-items: center;
+    }
+
+    .module_title:after {
+      position: absolute;
+      left: 4%;
+      bottom: 0px;
+      width: 92%;
+      height: 2px;
+      content: '';
+      border-bottom: solid 1px #d2d2d2;
+    }
+
+    .group_logo {
+      width: 0.15rem;
+      height: 0.13rem;
+      margin-right: 0.05rem;
+    }
+
+    .group_name {
+      position: relative;
+      box-sizing: border-box;
+      padding-right: 0.1rem;
+      height: 1rem;
+    }
+
+    .module_cell {
+      position: relative;
+      left: 4%;
+      top: 0px;
+      width: 92%;
+      background-color: #fafafa;
+      box-sizing: border-box;
+      padding: 0.1rem 0.15rem;
+      margin-top: 0.1rem;
+      font-size: 1rem;
+    }
+
+    .module_cell_li {
+      position: relative;
+      width: 100%;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
+
+    .module_cell_li>div:first-child {
+      display: flex;
+      align-items: center;
+      color: #101010;
+      width: 7rem;
+
+    }
+
+    .module_cell_li>div:last-child {
+      width: calc(100% - 1.2rem);
+      text-align: right;
+      word-break: break-all;
+    }
+
+    .phone_show,
+    .addr_show {
+      color: #a0a0a0;
+    }
+
+    .module_cell_li:last-child {
+      margin-top: 0.1rem;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="demo" class="container">
+    <div class="div2">
+      <input type="radio" :class="{'radio_off': !isChooseAll, 'radio_on': isChooseAll}" @click="chooseAll()" id="all">
+      <span class="match_count" :style="{color: chooseAllStyle}">&nbsp;全选</span>
+    </div>
+    <div class="modules">
+      <div class="module" v-for="(value, name, index) in provinceMap" :key="index">
+        <div class="module_title">
+          <input type="radio" :class="{'radio_off': !isGroupChooseMap[name], 'radio_on': isGroupChooseMap[name]}"
+            @click="groupChooseAll(name)">
+          <div>
+            <span class="group_name">{{name}}</span>
+          </div>
+        </div>
+        <div class="module_cell" v-for="city in value" :key="city.postalCode">
+          <div class="module_cell_li">
+            <div>
+              <input type="radio" :class="{'radio_off': !city.isChoose, 'radio_on': city.isChoose}"
+                @click="cityChoose(name, city)">
+              <span>城市名</span>
+            </div>
+            <div class="phone_show">{{city.name}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    var app1 = new Vue({
+      el: "#demo",
+      data() {
+        return {
+          provinceMap: {},
+          isChooseAll: false,
+          isGroupChooseMap: {}
+        }
+      },
+      computed: {
+        chooseAllStyle: function () {
+          return this.isChooseAll ? '#01a29a' : '#edc76b'
+        }
+      },
+      created() {
+        this.initProvince()
+      },
+      methods: {
+        initProvince() {
+          this.provinceMap = {
+            湖北省: [
+              {
+                postalCode: 430000,
+                name: '武汉市',
+                isChoose: false
+              }
+            ],
+            湖南省: [
+              {
+                postalCode: 410011,
+                name: '长沙市',
+                isChoose: false
+              },
+              {
+                postalCode: 427000,
+                name: '张家界市',
+                isChoose: false
+              }
+            ]
+          }
+          Object.keys(this.provinceMap).forEach(key => {
+            this.isGroupChooseMap[key] = false
+          })
+        },
+        chooseAll() {
+          this.isChooseAll = !this.isChooseAll
+
+          // console.log(this.isGroupChooseMap)
+          // 设置所有分组选中状态
+          Object.keys(this.isGroupChooseMap).forEach(key => {
+            this.isGroupChooseMap[key] = this.isChooseAll
+          })
+
+          // 设置所有分组下挂信息选中状态
+          Object.values(this.provinceMap).forEach(item => {
+            Object.values(item).forEach(subItem => {
+              subItem.isChoose = this.isChooseAll
+            })
+          })
+        },
+        groupChooseAll(groupName) {
+          // console.log(groupName)
+          this.isGroupChooseMap[groupName] = !this.isGroupChooseMap[groupName]
+          console.log(this.isGroupChooseMap[groupName])
+          // 设置分组下挂信息状态
+          this.provinceMap[groupName].forEach(city => {
+            city.isChoose = this.isGroupChooseMap[groupName]
+          })
+
+          this.checkGroupChooseStatus(this.isGroupChooseMap[groupName])
+        },
+        cityChoose(groupName, city) {
+          let isChooseBak = city.isChoose
+          city.isChoose = !isChooseBak
+          // 检查该分组是否全部选中
+          let checkGroupChoose = this.provinceMap[groupName].reduce((init, cur) => {
+            return init && cur.isChoose
+          }, city.isChoose)
+          // console.log(checkGroupChoose)
+          this.isGroupChooseMap[groupName] = checkGroupChoose
+
+          this.checkGroupChooseStatus(city.isChoose)
+        },
+        checkGroupChooseStatus(isChoose) {
+          // 检查各分组是否全部选中
+          let checkAllChoose = Object.values(this.isGroupChooseMap).reduce((init, cur) => {
+            return init && cur
+          }, isChoose)
+          // 根据检查结果设置是否全选
+          this.isChooseAll = checkAllChoose
+        }
+      },
+    });
+  </script>
+</body>
+
+</html>

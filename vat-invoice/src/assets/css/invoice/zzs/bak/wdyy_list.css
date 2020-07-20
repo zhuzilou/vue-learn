@@ -1,0 +1,111 @@
+@CHARSET "UTF-8";
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    width: 100%;
+    height: 100%;
+    font-family: '方正兰亭黑简体', "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 16px;
+}
+
+.container {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    background-color: #ffffff;
+    overflow-scrolling: touch;
+    -webkit-overflow-scrolling: touch;
+    -moz-overflow-scrolling: touch;
+    -ms-overflow-scrolling: touch;
+}
+
+img {
+    pointer-events: none; /* cancel pointer events*/
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Chrome/Safari/Opera */
+    -khtml-user-select: none; /* Konqueror */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently not supported by any browser */
+}
+
+input, button, select, textarea {
+    outline: none;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+.group {
+    position: relative;
+    left: 0;
+    top: 0;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.15rem 0.2rem;
+    background-color: #ffffff;
+}
+
+.group_row {
+    position: relative;
+    left: 0;
+    top: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.group:after {
+    content: '';
+    position: absolute;
+    left: 4%;
+    bottom: 0;
+    width: 100%;
+    height: 2px;
+    border-bottom: solid 1px #d2d2d2;
+}
+
+.container > .group:last-child:after {
+    display: none;
+}
+
+.group_row > div {
+    display: flex;
+    align-items: center;
+    font-size: 0.14rem;
+}
+
+.group_row > div:last-child {
+    color: #a0a0a0;
+}
+
+.logo1 {
+    display: block;
+    width: 0.3rem;
+    height: 0.3rem;
+    background: url("../../../image/invoice/zzs/numb_ico.png") no-repeat center center;
+    background-size: 16px 14px;
+}
+
+.logo2 {
+    display: block;
+    width: 0.3rem;
+    height: 0.3rem;
+    background: url("../../../image/invoice/zzs/address_ico.png") no-repeat center center;
+    background-size: 13px 16px;
+}
+

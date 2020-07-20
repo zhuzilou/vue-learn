@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Class与Style绑定</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <style>
+        h1 {
+            text-decoration: underline
+        }
+
+        .static {
+            color: #111111;
+        }
+
+        .active {
+            color: #aacf23;
+        }
+
+        .text-danger {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>绑定HTML Class</h1>
+    <h2>#对象语法</h2>
+    <div id="app1">
+        <div class="static" v-bind:class="classObject">1. 传给v-bind:class一个对象，动态切换class
+        </div>
+    </div>
+    <div id="app2">
+        <div class="static" v-bind:class="classObjectComputed">2. 进阶传递对象，利用对象的计算属性（computed）绑定
+        </div>
+    </div>
+    <script>
+        var app1 = new Vue({
+            el: "#app1",
+            data: {
+                classObject: {
+                    active: true,
+                    //需要加单引号
+                    'text-danger': false
+                }
+            }
+        });
+        var app2 = new Vue({
+            el: "#app2",
+            data: {
+                isActive: true,
+                error: null
+            },
+            computed: {
+                classObjectComputed: function () {
+                    return {
+                        active: this.isActive && !this.error,
+                        'text-danger': this.error && this.error.type === 'fatal'
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

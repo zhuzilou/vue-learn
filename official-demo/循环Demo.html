@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>循环Demo</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <style>
+        h1 {
+            text-decoration: underline
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <span>所见即所得: {{ msg }}</span>
+        <br>
+        <span v-once>标签中加入v-once属性，这里的值将不会改变: {{ msg }}</span>
+        <br>
+        <div>
+            动态修改文本值：
+            <input v-model="msg">
+        </div>
+        <hr>
+        <span>循环示例</span>
+        <ul id="example-1">
+            <li v-for="item in items">
+                {{item.id}}-{{ item.message }}
+            </li>
+        </ul>
+        <button v-on:click="change()">改变循环内容</button>
+    </div>
+</body>
+<script>
+    var app1 = new Vue({
+        el: "#app",
+        data: {
+            msg: "插入文本值",
+            items: [
+                { id: 1, message: 'Foo' },
+                { id: 2, message: 'Bar' }
+            ]
+        },
+        methods: {
+            change() {
+                this.items = [
+                    { id: 3, message: new Date().toLocaleString() }, 
+                    { id: 4, message: new Date().toLocaleString() }, 
+                    { id: 5, message: new Date().toLocaleString() }]
+                console.log(this.dynamicId);
+            }
+        }
+    });
+</script>
+
+</html>
